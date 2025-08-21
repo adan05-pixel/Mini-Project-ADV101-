@@ -1,83 +1,107 @@
 const BASE_NUMBER = 10;
 
-function calculate() {
-  const name = document.getElementById("name").value;
-  const number = parseInt(document.getElementById("number").value);
-  const arithmeticOutput = document.getElementById("arithmetic-output");
-  const ifOutput = document.getElementById("if-output");
-  const loopOutput = document.getElementById("loop-output");
-  const functionOutput = document.getElementById("function-output");
+// Greeting function
+function greetUser(name) {
+  return `Hello, ${name}!`;
+}
 
-  if (isNaN(number)) {
-    arithmeticOutput.innerHTML = "<p>Please enter a valid number.</p>";
+// Analyze name and number
+function analyze() {
+  const name = document.getElementById("name").value.trim();
+  const num = parseFloat(document.getElementById("number").value);
+  const output = document.getElementById("output");
+
+  if (!name || isNaN(num)) {
+    output.textContent = "Please enter a valid name and number.";
     return;
   }
 
-  // Arithmetic
-  let quotient = number !== 0 ? (BASE_NUMBER / number).toFixed(2) : "Undefined (cannot divide by zero)";
-  arithmeticOutput.innerHTML = `
-    <h3>Arithmetic Results</h3>
-    <p>Sum: ${BASE_NUMBER + number}</p>
-    <p>Difference: ${BASE_NUMBER - number}</p>
-    <p>Product: ${BASE_NUMBER * number}</p>
-    <p>Quotient: ${quotient}</p>
-  `;
+  // Calculations
+  const sum = BASE_NUMBER + num;
+  const diff = BASE_NUMBER - num;
+  const product = BASE_NUMBER * num;
+  const quotient = (num !== 0) ? (BASE_NUMBER / num).toFixed(2) : "Undefined (division by zero)";
 
-  // If Statement
-  let ifResult = "";
-  if (number >= 0) {
-    ifResult += "<p>The number is positive or zero (if statement).</p>";
+  // Conditional checks
+  let posNeg = "";
+  if (num >= 0) {
+    posNeg = "positive";
   } else {
-    ifResult += "<p>The number is negative (if statement).</p>";
+    posNeg = "negative";
   }
 
-  // Ternary Operator
-  let ternaryResult = number >= 0 ? "positive or zero" : "negative";
-  ifResult += `<p>The number is ${ternaryResult} (ternary operator).</p>`;
-  ifOutput.innerHTML = "<h3>If & Ternary</h3>" + ifResult;
+  const posNegTernary = num >= 0 ? "positive" : "negative";
 
-  // For Loop
-  let loopHTML = "<h3>Loops</h3><p>Counting from 1 to your number:</p><p>";
-  for (let i = 1; i <= number; i++) {
-    loopHTML += i + " ";
+  output.innerHTML = `
+    ${greetUser(name)}<br>
+    Your number is <strong>${num}</strong>.<br>
+    Sum (BASE + num): ${sum}<br>
+    Difference: ${diff}<br>
+    Product: ${product}<br>
+    Quotient: ${quotient}<br>
+    (If-statement) The number is ${posNeg}.<br>
+    (Ternary) The number is ${posNegTernary}.
+  `;
+}
+
+// Convert sentence to uppercase and lowercase
+function convert() {
+  const sentence = document.getElementById("sentence").value.trim();
+  const output = document.getElementById("string-output");
+
+  if (!sentence) {
+    output.textContent = "Please enter a sentence.";
+    return;
   }
-  loopHTML += "</p><p>Counting down from 5:</p><p>";
+
+  output.innerHTML = `
+    <strong>Uppercase:</strong> ${sentence.toUpperCase()}<br>
+    <strong>Lowercase:</strong> ${sentence.toLowerCase()}
+  `;
+}
+
+// Display favorite fruits
+function showFruits() {
+  const fruits = [
+    document.getElementById("fruit1").value.trim(),
+    document.getElementById("fruit2").value.trim(),
+    document.getElementById("fruit3").value.trim()
+  ].filter(fruit => fruit !== "");
+
+  const output = document.getElementById("fruit-output");
+
+  if (fruits.length === 0) {
+    output.textContent = "Please enter at least one fruit.";
+    return;
+  }
+
+  output.innerHTML = `Your favorite fruits:<ul>${fruits.map(f => `<li>${f}</li>`).join('')}</ul>`;
+}
+
+// Show loop examples
+function showLoops() {
+  const loopOutput = document.getElementById("loop-output");
+
+  // Get number input for for-loop
+  const number = parseInt(document.getElementById("number").value);
+  let forLoopResult = "";
+  if (!isNaN(number) && number > 0) {
+    forLoopResult = "<strong>For Loop (1 to number):</strong><br>";
+    for (let i = 1; i <= number; i++) {
+      forLoopResult += i + " ";
+    }
+  } else {
+    forLoopResult = "<strong>Invalid number for for loop.</strong><br>";
+  }
+
+  // While loop countdown from 5
   let count = 5;
-  while (count > 0) {
-    loopHTML += count + " ";
+  let whileLoopResult = "<br><strong>While Loop (countdown from 5):</strong><br>";
+  while (count >= 1) {
+    whileLoopResult += count + " ";
     count--;
   }
-  loopHTML += "</p>";
-  loopOutput.innerHTML = loopHTML;
 
-  // Function Greeting
-  greetUser(name);
+  loopOutput.innerHTML = forLoopResult + whileLoopResult;
 }
 
-function greetUser(name) {
-  const functionOutput = document.getElementById("function-output");
-  functionOutput.innerHTML = `<h3>Greeting</h3><p>Hello, ${name}!</p>`;
-}
-
-function convertCase() {
-  const sentence = document.getElementById("sentence").value;
-  const stringOutput = document.getElementById("string-output");
-
-  stringOutput.innerHTML = `
-    <h3>String Methods</h3>
-    <p>Uppercase: ${sentence.toUpperCase()}</p>
-    <p>Lowercase: ${sentence.toLowerCase()}</p>
-  `;
-}
-
-function showFruits() {
-  const fruit1 = document.getElementById("fruit1").value;
-  const fruit2 = document.getElementById("fruit2").value;
-  const fruit3 = document.getElementById("fruit3").value;
-
-  const fruits = [fruit1, fruit2, fruit3];
-  const fruitOutput = document.getElementById("fruit-output");
-
-  fruitOutput.innerHTML = "<h3>Your Favorite Fruits</h3><ul>" + 
-    fruits.map(f => `<li>${f}</li>`).join("") + "</ul>";
-}
